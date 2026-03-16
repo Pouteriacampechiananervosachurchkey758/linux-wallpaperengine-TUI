@@ -1,5 +1,5 @@
 # linux-wallpaperengine-TUI
-A lightweight, fast, linux-wallpaperengine UI by me!~
+A lightweight, fast, universal, linux-wallpaperengine TUI by me!~
 
 ## Dependencies
 
