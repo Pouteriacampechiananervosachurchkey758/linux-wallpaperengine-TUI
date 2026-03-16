@@ -82,7 +82,7 @@ load_we_args() {
         printf '%s\n' "$WE_ARGS_DEFAULT" > "$WE_ARGS_FILE"
     fi
     IFS= read -r WE_ARGS < "$WE_ARGS_FILE"
-    read -ra WE_ARGS_ARR <<< "$WE_ARGS"
+    WE_ARGS_ARR=($WE_ARGS)
 }
 
 load_color_tool() {
@@ -128,10 +128,11 @@ select_color_tool() {
 }
 
 edit_walldir() {
-    local new_path
+    local new_path fzf_exit
     new_path=$(fzf "${FZF_MENU_OPTS[@]}" --prompt="Wallpaper dir > "         --print-query --no-info --query "$WALLDIR" < /dev/null)
-    [[ $? -ne 0 && $? -ne 1 ]] && return
-    new_path=$(head -1 <<< "$new_path")
+    fzf_exit=$?
+    [[ $fzf_exit -ne 0 && $fzf_exit -ne 1 ]] && return
+    new_path="${new_path%%$'\n'*}"
     [[ -z "$new_path" ]] && return
     if [[ ! -d "$new_path" ]]; then
         printf '%s' "Error: directory does not exist." > "$STATUS_FILE"
@@ -143,12 +144,12 @@ edit_walldir() {
 }
 
 edit_we_args() {
-    local new_args raw
+    local raw fzf_exit
     raw=$(fzf "${FZF_MENU_OPTS[@]}" --prompt="WE args > "         --print-query --no-info --query "$WE_ARGS" < /dev/null)
-    [[ $? -ne 0 && $? -ne 1 ]] && return
-    new_args=$(head -1 <<< "$raw")
-    WE_ARGS="$new_args"
-    read -ra WE_ARGS_ARR <<< "$WE_ARGS"
+    fzf_exit=$?
+    [[ $fzf_exit -ne 0 && $fzf_exit -ne 1 ]] && return
+    WE_ARGS="${raw%%$'\n'*}"
+    WE_ARGS_ARR=($WE_ARGS)
     printf '%s\n' "$WE_ARGS" > "$WE_ARGS_FILE"
 }
 
@@ -171,6 +172,7 @@ toggle_audio() {
         WE_ARGS="${WE_ARGS/--volume +([0-9])/--volume 0}"
         shopt -u extglob
     fi
+    WE_ARGS_ARR=($WE_ARGS)
     printf '%s\n' "$WE_ARGS" > "$WE_ARGS_FILE"
     [[ ! -f "$LAST_DIR/we-last-wallpaper-${SCREEN}" ]] && return
     local wallpath
@@ -198,11 +200,7 @@ show_current_wallpaper() {
         printf '%s' "Current wallpaper not found in cache." > "$STATUS_FILE"
         return
     fi
-    echo "Title: $title"
-    echo "Type:  $type"
-    echo "Path:  $wallpath"
-    read -r -s -n1 -p "Press any key to continue..."
-    echo
+    printf '%s' "Title: $title | Type: $type | Path: $wallpath" > "$STATUS_FILE"
 }
 
 manage_hidden_list() {
@@ -211,14 +209,20 @@ manage_hidden_list() {
         choice=$(printf 'Export hidden list\nImport hidden list\nBack' | fzf_menu "Hidden list")
         case "$choice" in
             "Export hidden list")
-                local dest
-                read -e -i "$HOME/walliwalli-hidden.txt" -r -p "Export to: " dest
+                local dest fzf_exit
+                dest=$(fzf "${FZF_MENU_OPTS[@]}" --prompt="Export to > "                     --print-query --no-info --query "$HOME/walliwalli-hidden.txt" < /dev/null)
+                fzf_exit=$?
+                [[ $fzf_exit -ne 0 && $fzf_exit -ne 1 ]] && continue
+                dest="${dest%%$'\n'*}"
                 [[ -z "$dest" ]] && continue
                 cp "$HIDDEN" "$dest" && printf '%s' "Exported to $dest." > "$STATUS_FILE" || printf '%s' "Export failed." > "$STATUS_FILE"
                 ;;
             "Import hidden list")
-                local src
-                read -e -r -p "Import from: " src
+                local src fzf_exit
+                src=$(fzf "${FZF_MENU_OPTS[@]}" --prompt="Import from > "                     --print-query --no-info < /dev/null)
+                fzf_exit=$?
+                [[ $fzf_exit -ne 0 && $fzf_exit -ne 1 ]] && continue
+                src="${src%%$'\n'*}"
                 [[ -z "$src" ]] && continue
                 if [[ ! -f "$src" ]]; then
                     printf '%s' "File not found." > "$STATUS_FILE"
@@ -424,8 +428,12 @@ unset WALLPAPER_FILES
 
 sleep 0.02
 while true; do
-    selection=$({ printf '⚙ Settings\n'; get_input; } | fzf \
-        "${FZF_OPTS[@]}" --prompt="Wallpaper > ")
+    if [[ -s "$STATUS_FILE" ]]; then
+        selection=$({ printf '⚙ Settings\n'; get_input; } | fzf             "${FZF_OPTS[@]}" --prompt="Wallpaper > " --header "$(< "$STATUS_FILE")")
+        > "$STATUS_FILE"
+    else
+        selection=$({ printf '⚙ Settings\n'; get_input; } | fzf             "${FZF_OPTS[@]}" --prompt="Wallpaper > ")
+    fi
     [[ -z "$selection" ]] && exit
 
     if [[ "$selection" == "⚙ Settings" ]]; then
