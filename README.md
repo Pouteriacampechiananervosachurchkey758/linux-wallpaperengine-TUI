@@ -12,7 +12,7 @@ A lightweight, fast, linux-wallpaperengine UI by me!~
 **Required (but you get to choose between them OwO)**
 - [xrandr](https://www.x.org/wiki/Projects/XRandR/)
 - [wlr-randr](https://sr.ht/~emersion/wlr-randr/)
-If you're on hyprland don't worry about this, hyprctl is an option too.
+- If you're on hyprland don't worry about this, hyprctl is an option too.
 
 **Optional (color tools):**
 - [wallust](https://codeberg.org/explosion-mental/wallust) - the best btw
