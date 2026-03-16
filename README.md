@@ -47,7 +47,7 @@ Just run:
 walliwalli
 ```
 
-A cool and cute :3 fuzzy-searchable list of your wallpaperengine wallpapers should appear, if it doesn't and you checked that you put in the right directory in the settings please tell me.
+A cool fuzzy-searchable list of your wallpaperengine wallpapers should appear, if it doesn't then your directory wasn't detected so go to settings and add it :<
 
 Press Escape or Ctrl+C to exit without launching anything.
 
